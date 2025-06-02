@@ -103,4 +103,52 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     fetchWeatherForecast();
+
+    // Cleanup locations (future: could be dynamic)
+    let cleanups = [
+        {
+            name: 'Pasir Ris',
+            lat: 1.381497,
+            lng: 103.955574,
+            description: 'Next Cleanup: Pasir Ris'
+        }
+    ];
+
+    function renderCleanup() {
+        const mapSection = document.getElementById('map-section');
+        const mapDiv = document.getElementById('map');
+        // Remove any previous info text
+        let info = mapSection.querySelector('.cleanup-info');
+        if (info) info.remove();
+        let cleanup = cleanups[0];
+        if (!cleanup) {
+            // If no cleanups, provide a default
+            cleanup = {
+                name: 'Pasir Ris',
+                lat: 1.381497,
+                lng: 103.955574,
+                description: 'Next Cleanup: Pasir Ris'
+            };
+        }
+        // Update map iframe
+        mapDiv.innerHTML = `<iframe
+            title="Next Cleanup at ${cleanup.name}"
+            width="100%"
+            height="400"
+            frameborder="0"
+            style="border:0; border-radius:0.5rem; min-width:250px;"
+            src="https://maps.google.com/maps?q=${cleanup.lat},${cleanup.lng}&z=16&output=embed"
+            allowfullscreen></iframe>`;
+        // Add info below map
+        const infoDiv = document.createElement('div');
+        infoDiv.className = 'cleanup-info';
+        infoDiv.style.marginTop = '0.5rem';
+        infoDiv.style.color = '#2196F3';
+        infoDiv.style.fontWeight = 'bold';
+        infoDiv.style.textAlign = 'center';
+        infoDiv.textContent = cleanup.description;
+        mapSection.appendChild(infoDiv);
+    }
+
+    renderCleanup();
 });
